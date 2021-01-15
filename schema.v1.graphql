@@ -1,0 +1,37 @@
+# This file was generated based on ".graphqlconfig". Do not edit manually.
+
+schema {
+    query: Query
+}
+
+type Query {
+    town(town: ID!): Town
+    towns(world: ID!): [Town!],
+    player(player: ID!): Player
+    worlds: [World!]
+}
+
+type World {
+    id: ID!,
+    name: String!,
+    towns: [Town!]!
+}
+
+type Player {
+    id: ID!,
+    name: String!,
+    town: Town
+}
+
+type Demographic {
+    id: ID!,
+    name: String!,
+    town: Town
+}
+
+type Town {
+    id: ID!,
+    name: String!,
+    members: [Player!]!,
+    demos: [Demographic!]!
+}
