@@ -1,7 +1,6 @@
-# Towns And Kings API
-This is a nodejs graphql api,
-for accessing our plugins data.
+# Towns And Kings Backend
 
-See `schema.v1.graphql` file for the schema of the api
+The backend for my minecraft plugin
 
-See https://github.com/ewoudje/Towns-and-Kings
+TODO:
+ * a readme...
