@@ -1,5 +1,7 @@
-require WorkList
-WorkList.define TKDemographic do
+require TownsKings.Repo.Macro.WorkList
+import TownsKings.Repo.Macro.WorkList
+
+define_object TownsKings.Repo.Demographic do
 
   redis :demographic,
         [

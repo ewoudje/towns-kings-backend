@@ -1,5 +1,7 @@
-require WorkList
-WorkList.define TKPlayer do
+require TownsKings.Repo.Macro.WorkList
+import TownsKings.Repo.Macro.WorkList
+
+define_object TownsKings.Repo.Player do
 
   redis :player,
         [

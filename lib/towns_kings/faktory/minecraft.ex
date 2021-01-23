@@ -1,4 +1,7 @@
-defmodule Minecraft do
+defmodule TownsKings.Repo.Minecraft do
+
+  alias TownsKings.Repo.Macro.Redis
+  alias __MODULE__
 
   def queue(type, payload) do
     Minecraft.queue(type, payload, :fast)

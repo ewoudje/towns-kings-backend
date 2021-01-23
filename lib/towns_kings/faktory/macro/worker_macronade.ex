@@ -1,4 +1,4 @@
-defmodule WorkerMacronade do
+defmodule TownsKings.Repo.Macro.WorkerMacronade do
   @moduledoc false
 
   def start_process_inside([do: expr], params) do

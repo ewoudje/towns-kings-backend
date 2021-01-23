@@ -1,5 +1,7 @@
-require WorkList
-WorkList.define TKBlock do
+require TownsKings.Repo.Macro.WorkList
+import TownsKings.Repo.Macro.WorkList
+
+define_object TownsKings.Repo.Block do
 
   redis :block,
         [
@@ -25,7 +27,7 @@ WorkList.define TKBlock do
     world = !self.world;
 
     Redis.del("pos:#{x}:#{y}:#{z}")
-    TK.queue(:block, [material: "air", x: x, y: y, z: z, world: world])
-    destroy(@self)
+    Minecraft.queue(:block, [material: "air", x: x, y: y, z: z, world: world])
+    redis_destroy(@self)
   end
 end

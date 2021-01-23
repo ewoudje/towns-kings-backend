@@ -1,5 +1,7 @@
-require WorkList
-WorkList.define TKPlotCategory do
+require TownsKings.Repo.Macro.WorkList
+import TownsKings.Repo.Macro.WorkList
+
+define_object TownsKings.Repo.PlotCategory do
 
   redis :plotcategory,
         [
@@ -12,13 +14,13 @@ WorkList.define TKPlotCategory do
     !self.town = town
     !self.priority = priority
 
-    !TKTown.(town).plot_categories =+ {name, @self}
+    !Town.(town).plot_categories =+ {name, @self}
 
     #Map into chunks
   end
 
   job destroy() do
     #Redis.del("pos:#{!self.x}:#{!self.y}:#{!self.z}")
-    destroy(@self)
+    redis_destroy(@self)
   end
 end

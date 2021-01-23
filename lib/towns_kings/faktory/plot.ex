@@ -1,5 +1,7 @@
-require WorkList
-WorkList.define TKPlot do
+require TownsKings.Repo.Macro.WorkList
+import TownsKings.Repo.Macro.WorkList
+
+define_object TownsKings.Repo.Plot do
 
   redis :plot,
         [
@@ -30,11 +32,11 @@ WorkList.define TKPlot do
     cXE = xE / 16;
     cZE = zE / 16;
 
-    town = !TKPlotCategory.(settings).town
+    town = !PlotCategory.(settings).town
 
-    !TKTown.(town).plots =+ {name, @self}
+    !Town.(town).plots =+ {name, @self}
 
-    prio = !TKPlotCategory.(settings).priority
+    prio = !PlotCategory.(settings).priority
 
     Enum.each cXS..cXE, fn x -> Enum.each cZS..cZE, fn z ->
       Redis.rSend("zadd", "chunk:#{x}:#{z}:plots", prio, @self)
@@ -51,6 +53,6 @@ WorkList.define TKPlot do
     Enum.each cXS..cXE, fn x -> Enum.each cZS..cZE, fn z ->
       Redis.rSend("zrem", "chunk:#{x}:#{z}:plots", @self)
     end end
-    destroy(@self)
+    redis_destroy(@self)
   end
 end

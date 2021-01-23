@@ -1,5 +1,7 @@
-require WorkList
-WorkList.define TKTown do
+require TownsKings.Repo.Macro.WorkList
+import TownsKings.Repo.Macro.WorkList
+
+define_object TownsKings.Repo.Town do
 
   redis :town,
         [
@@ -18,25 +20,25 @@ WorkList.define TKTown do
     !self.founding_block = fblock
     !self.founder = founder
 
-    !TKWorld.(world).towns =+ {name, @self}
+    !World.(world).towns =+ {name, @self}
     Minecraft.queue(:chat, [message: "broadcast-create-town", params: "dummy:#{name}", ttype: "world", target: world]) #PLAYER NAME
 
-    TKTown.Join.perform_async([@self, founder])
+    join(@self, founder)
 
-    TKPlotCategory.Create.perform_async([UUID.uuid1(), "default", @self, 1000])
+    PlotCategory.create(UUID.uuid1(), "default", @self, 1000)
   end
 
   job join(player) do
     !self.members =+ player
-    !TKPlayer.(player).town = @self
+    !Player.(player).town = @self
   end
 
   job leave(player) do
     !self.members =- player
-    !TKPlayer.(player).town = nil
+    !Player.(player).town = nil
 
     if !self.founder == player do
-      TKTown.Destroy.perform_async(@self)
+      destroy(@self)
     end
   end
 
@@ -55,13 +57,13 @@ WorkList.define TKTown do
     #
     #
 
-    TKBlock.Destroy.perform_async(!self.founding_block)
+    Block.destroy(!self.founding_block)
 
     world = !self.world #TODO this shouldn't be needed
 
-    !TKWorld.(world).towns =- !self.name
+    !World.(world).towns =- !self.name
 
-    destroy(@self)
+    redis_destroy(@self)
   end
 end
 

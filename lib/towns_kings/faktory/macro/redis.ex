@@ -1,4 +1,4 @@
-defmodule Redis do
+defmodule TownsKings.Repo.Macro.Redis do
   alias __MODULE__
   @moduledoc false
 
