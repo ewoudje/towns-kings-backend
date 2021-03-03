@@ -21,6 +21,6 @@ define_object TownsKings.Repo.PlotCategory do
 
   job destroy() do
     #Redis.del("pos:#{!self.x}:#{!self.y}:#{!self.z}")
-    redis_destroy(@self)
+    Minecraft.next_tick fn() -> redis_destroy(@self) end
   end
 end

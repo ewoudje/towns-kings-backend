@@ -28,6 +28,7 @@ define_object TownsKings.Repo.Block do
 
     Redis.del("pos:#{x}:#{y}:#{z}")
     Minecraft.queue(:block, [material: "air", x: x, y: y, z: z, world: world])
-    redis_destroy(@self)
+
+    Minecraft.next_tick fn() -> redis_destroy(@self) end
   end
 end

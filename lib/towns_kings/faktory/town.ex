@@ -69,7 +69,7 @@ define_object TownsKings.Repo.Town do
 
     !World.(world).towns =- !self.name
 
-    redis_destroy(@self)
+    Minecraft.next_tick fn() -> redis_destroy(@self) end
   end
 end
 
