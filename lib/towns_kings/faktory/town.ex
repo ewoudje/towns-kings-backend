@@ -22,7 +22,7 @@ define_object TownsKings.Repo.Town do
 
     !World.(world).towns =+ {name, @self}
     Minecraft.queue(:chat, [message: "create-town", params: "#{name}", ttype: "player", target: founder])
-    Minecraft.queue(:chat, [message: "broadcast-create-town", params: "#{founder}:#{name}", ttype: "world", target: world])
+    Minecraft.queue(:chat, [message: "broadcast-create-town", params: "p@#{founder}:#{name}", ttype: "world", target: world])
 
     join(@self, founder)
 
