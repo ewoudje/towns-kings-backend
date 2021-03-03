@@ -1,6 +1,6 @@
-defmodule TownsKingsApi do
+defmodule TownsKings do
   @moduledoc """
-  TownsKingsApi keeps the contexts that define your domain
+  TownsKings keeps the contexts that define your domain
   and business logic.
 
   Contexts are also responsible for managing your data, regardless

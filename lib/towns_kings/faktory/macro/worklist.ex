@@ -42,6 +42,10 @@ defmodule TownsKings.Repo.Macro.WorkList do
           _ -> :ok
         end
       end
+
+      def get(uuid, field) do
+        Redis.get_(@redis_fields, @redis_name, field, uuid)
+      end
     end
   end
 
@@ -64,12 +68,17 @@ defmodule TownsKings.Repo.Macro.WorkList do
      quote do: @redis_fields [unquote(Macro.escape({name, {:set, Atom.to_string name}})) | @redis_fields]
   end
 
-  defmacro prov({name, l, params}, _expr \\ nil) do
+  defmacro prov({name, l, params}, expr \\ nil) do
+    params = [{:self__, l, nil} | params];
+
     quote do
+      def unquote({name, l, params}), unquote(WorkerMacronade.process_inside(expr))
+    end
+  end
 
-      def unquote({name, l, params}) do
-
-      end
+  defmacro g_prov({name, l, params}, expr \\ nil) do
+    quote do
+      def unquote({name, l, params}), unquote(WorkerMacronade.process_inside(expr))
     end
   end
 

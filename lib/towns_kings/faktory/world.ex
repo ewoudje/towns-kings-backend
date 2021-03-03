@@ -9,6 +9,17 @@ define_object TownsKings.Repo.World do
           {:towns, :hset}
         ]
 
+  g_prov worlds() do
+    {:ok, r} = Redix.command(:redix, ["smembers", "worlds"])
+
+    r
+  end
+
+  prov towns() do
+    {:ok, r} = Redix.command(:redix, ["hvals", "world:#{@self}:towns"])
+
+    r
+  end
 
 end
 
