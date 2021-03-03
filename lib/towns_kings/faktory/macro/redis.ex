@@ -5,7 +5,9 @@ defmodule TownsKings.Repo.Macro.Redis do
   def pipeline() do
     commands = recv_commands([])
 
-    Redix.pipeline!(:redix, commands)
+    if commands != [] do
+      Redix.pipeline!(:redix, commands)
+    end
   end
 
   defp recv_commands(list) do

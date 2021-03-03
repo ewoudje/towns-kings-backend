@@ -6,8 +6,6 @@ defmodule TownsKings.Application do
   use Application
 
   def start(_type, _args) do
-    FaktoryWorker.attach_default_telemetry_handler()
-
     children = [
       # Start the Telemetry supervisor
       TownsKings.Telemetry,
@@ -33,7 +31,9 @@ defmodule TownsKings.Application do
             "low"
           ]
         ]
-      ]} | children]
+      ]},
+        TownsKings.Repo.Minecraft.TickExec
+      ] ++ children
     else
       children
     end
