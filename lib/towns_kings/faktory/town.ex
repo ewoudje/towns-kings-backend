@@ -21,7 +21,8 @@ define_object TownsKings.Repo.Town do
     !self.founder = founder
 
     !World.(world).towns =+ {name, @self}
-    Minecraft.queue(:chat, [message: "broadcast-create-town", params: "dummy:#{name}", ttype: "world", target: world]) #PLAYER NAME
+    Minecraft.queue(:chat, [message: "create-town", params: "#{name}", ttype: "player", target: founder])
+    Minecraft.queue(:chat, [message: "broadcast-create-town", params: "#{founder}:#{name}", ttype: "world", target: world])
 
     join(@self, founder)
 
@@ -36,6 +37,11 @@ define_object TownsKings.Repo.Town do
   job leave(player) do
     !self.members =- player
     !Player.(player).town = nil
+
+    self = @self
+
+    Minecraft.queue(:chat, [message: "player-left", params: "p@#{player}", ttype: "town", target: self])
+    Minecraft.queue(:chat, [message: "leave-town", params: "t@#{self}", ttype: "player", target: player])
 
     if !self.founder == player do
       destroy(@self)
