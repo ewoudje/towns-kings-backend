@@ -67,6 +67,15 @@ define_object TownsKings.Repo.Town do
 
     world = !self.world #TODO this shouldn't be needed
 
+    for [_, plotC] <- Enum.chunk_every(!self.plot_categories, 2) do
+      PlotCategory.destroy(plotC)
+    end
+
+    for [_, plot] <- Enum.chunk_every(!self.plots, 2) do
+      Plot.destroy(plot)
+    end
+
+
     !World.(world).towns =- !self.name
 
     Minecraft.next_tick fn() -> redis_destroy(@self) end
