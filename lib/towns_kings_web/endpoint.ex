@@ -10,6 +10,26 @@ defmodule TownsKingsWeb.Endpoint do
     signing_salt: "RXFbEj1x"
   ]
 
+  @spec init(atom, Keyword.t()) :: {:ok, Keyword.t()} | no_return
+  def init(_key, config) do
+    if config[:load_from_system_env] do
+      port = System.get_env("PORT") || raise("expected the PORT environment variable to be set")
+
+      secret_key_base =
+        System.get_env("SECRET_KEY_BASE") ||
+          raise("expected the SECRET_KEY_BASE environment variable to be set")
+
+      config =
+        config
+        |> Keyword.put(:http, [:inet6, port: port])
+        |> Keyword.put(:secret_key_base, secret_key_base)
+
+      {:ok, config}
+    else
+      {:ok, config}
+    end
+  end
+
   socket "/socket", TownsKingsWeb.UserSocket,
     websocket: true,
     longpoll: false
@@ -23,7 +43,7 @@ defmodule TownsKingsWeb.Endpoint do
   plug Plug.Static,
     at: "/",
     from: :towns_kings,
-    gzip: false
+    gzip: true
 
   # Code reloading can be explicitly enabled under the
   # :code_reloader configuration of your endpoint.

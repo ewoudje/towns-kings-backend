@@ -6,19 +6,25 @@ defmodule TownsKings.Application do
   use Application
 
   def start(_type, _args) do
+    Redix.Telemetry.attach_default_handler()
+
     children = [
       # Start the Telemetry supervisor
       TownsKings.Telemetry,
       # Start the PubSub system
       {Phoenix.PubSub, name: TownsKings.PubSub}, #TODO how should we use this? (has redis option)
-      {Redix, name: :redix}
+      {Redix, [
+        port: String.to_integer(System.get_env("REDIS_PORT", "6379")),
+        host: System.get_env("REDIS_HOST", "localhost"),
+        name: :redix
+      ]}
     ]
 
     children = if Application.get_env(:towns_kings, :enable_faktroy, true) do
       [{FaktoryWorker, [
         connection: [
-          host: Application.get_env(:towns_kings, :faktroy_host, "localhost"),
-          port: Application.get_env(:towns_kings, :faktroy_port, 7419),
+          host: Application.get_env(:towns_kings, :faktroy_host, System.get_env("FAKTORY_HOST", "localhost")),
+          port: Application.get_env(:towns_kings, :faktroy_port, String.to_integer(System.get_env("FAKTORY_PORT", "7419"))),
         ],
         worker_pool: [
           queues: [

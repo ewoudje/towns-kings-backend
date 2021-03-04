@@ -1,0 +1,6 @@
+assets/node_modules
+assets/build
+deps
+_build
+.idea
+priv/static

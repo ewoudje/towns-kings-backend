@@ -41,7 +41,7 @@ defmodule TownsKingsWeb.Router do
 
     scope "/", TownsKingsWeb do
       pipe_through :browser
-      live_dashboard "/api/dashboard", metrics: TownsKings.Telemetry
+      live_dashboard "/dev/dashboard", metrics: TownsKings.Telemetry
       forward "/", Plugs.StaticPlug
     end
   else
