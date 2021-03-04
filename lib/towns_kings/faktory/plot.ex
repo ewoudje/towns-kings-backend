@@ -25,12 +25,13 @@ define_object TownsKings.Repo.Plot do
     !self.zE = zE
     !self.settings = settings
 
+    use Bitwise
 
-    cXS = xS / 16; #Should i do bit shifting?
-    cZS = zS / 16;
+    cXS = String.to_integer(xS) >>> 4; #Should i do bit shifting?
+    cZS = String.to_integer(zS) >>> 4;
 
-    cXE = xE / 16;
-    cZE = zE / 16;
+    cXE = String.to_integer(xE) >>> 4;
+    cZE = String.to_integer(zE) >>> 4;
 
     town = !PlotCategory.(settings).town
 
@@ -44,15 +45,18 @@ define_object TownsKings.Repo.Plot do
   end
 
   job destroy() do
-    cXS = !self.xS / 16; #Should i do bit shifting?
-    cZS = !self.zS / 16;
+    use Bitwise
 
-    cXE = !self.xE / 16;
-    cZE = !self.zE / 16;
+    cXS = String.to_integer(!self.xS) >>> 4; #Should i do bit shifting?
+    cZS = String.to_integer(!self.zS) >>> 4;
+
+    cXE = String.to_integer(!self.xE) >>> 4;
+    cZE = String.to_integer(!self.zE) >>> 4;
 
     Enum.each cXS..cXE, fn x -> Enum.each cZS..cZE, fn z ->
       Redis.rSend("zrem", "chunk:#{x}:#{z}:plots", @self)
     end end
-    redis_destroy(@self)
+
+    Minecraft.next_tick fn() -> redis_destroy(@self) end
   end
 end

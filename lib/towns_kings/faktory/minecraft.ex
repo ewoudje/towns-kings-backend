@@ -51,6 +51,7 @@ defmodule TownsKings.Repo.Minecraft.TickExec do
     for exec <- state do
       exec.()
     end
+    TownsKings.Repo.Macro.Redis.pipeline()
     {:noreply, []}
   end
 end
@@ -60,6 +61,5 @@ defmodule TownsKings.Repo.Minecraft.Tick do
 
   def perform() do
     GenServer.cast(TickExec, :exec)
-    TownsKings.Repo.Macro.Redis.pipeline()
   end
 end
