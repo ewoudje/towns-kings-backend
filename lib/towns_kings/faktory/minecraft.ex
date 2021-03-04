@@ -39,20 +39,22 @@ defmodule TownsKings.Repo.Minecraft.TickExec do
     GenServer.start_link(__MODULE__, [], name: TickExec)
   end
 
-  def init(init_arg) do
-    {:ok, init_arg}
+  def init(_init_arg) do
+    {:ok, {[], []}}
   end
 
   def handle_cast({:add, exec}, state) do
-    {:noreply, [exec | state]}
+    {current, next} = state
+    {:noreply, {current, [exec | next]}}
   end
 
   def handle_cast(:exec, state) do
-    for exec <- state do
+    {current, next} = state
+    for exec <- current do
       exec.()
     end
     TownsKings.Repo.Macro.Redis.pipeline()
-    {:noreply, []}
+    {:noreply, {next, []}}
   end
 end
 
